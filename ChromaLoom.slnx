@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ChromaLoom.Api/ChromaLoom.Api.csproj" />
+    <Project Path="src/ChromaLoom.Infrastructure/ChromaLoom.Infrastructure.csproj" />
+    <Project Path="src/ChromaLoom.Kernel/ChromaLoom.Kernel.csproj" />
+    <Project Path="src/ChromaLoom.Modules/ChromaLoom.Modules.csproj" />
+  </Folder>
+</Solution>
