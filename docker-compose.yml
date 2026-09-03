@@ -1,0 +1,27 @@
+# Define all application containers (services)
+services:
+
+  # ---------------------------------------------------------------------------
+  # Application Database (PostgreSQL)
+  # Primary data store for the .NET API
+  # ---------------------------------------------------------------------------
+  application-db:
+    image: postgres:latest
+    container_name: application-db
+    environment:
+      POSTGRES_DB: ${APPLICATION_DB_NAME}
+      POSTGRES_USER: ${APPLICATION_DB_USERNAME}
+      POSTGRES_PASSWORD: ${APPLICATION_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - application_data:/var/lib/postgresql/data
+    networks:
+      - private
+
+volumes:
+  application_data:
+
+networks:
+  private:
+    driver: bridge
