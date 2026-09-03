@@ -7,6 +7,7 @@ internal static partial class Services
         internal void AddServices()
         {
             builder
+                .AddStartupBanner()
                 .AddDocumentation();
         }
     }

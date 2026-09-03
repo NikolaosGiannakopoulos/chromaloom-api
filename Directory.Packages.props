@@ -2,6 +2,10 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
+  <ItemGroup Label="Branding">
+    <PackageVersion Include="Figgle.Fonts" Version="0.6.6" />
+    <PackageVersion Include="Spectre.Console" Version="0.57.2" />
+  </ItemGroup>
   <ItemGroup Label="ApiDocumentation">
     <PackageVersion Include="Scalar.AspNetCore" Version="2.17.2" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
