@@ -1,8 +1,8 @@
 using Asp.Versioning;
 
-namespace ChromaLoom.Api.Setup.Services.Registration;
+namespace ChromaLoom.Api.Setup;
 
-internal static partial class Services
+internal static partial class ServiceRegistration
 {
     extension(WebApplicationBuilder builder)
     {

@@ -1,8 +1,8 @@
 using Scalar.AspNetCore;
 
-namespace ChromaLoom.Api.Setup.Pipeline.Orchestration;
+namespace ChromaLoom.Api.Setup;
 
-internal static partial class Pipeline
+internal static partial class PipelineOrchestration
 {
     extension(WebApplication app)
     {

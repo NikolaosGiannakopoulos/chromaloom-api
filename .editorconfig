@@ -13,5 +13,26 @@ indent_size = 2
 [*.cs]
 indent_size = 4
 
+# Prefer file-scoped namespaces; block namespaces warn (and fail the build).
+csharp_style_namespace_declarations = file_scoped:warning
+
+# CA2007: ConfigureAwait — not needed in ASP.NET Core; no UI sync context.
 dotnet_diagnostic.CA2007.severity = none
+
+# CA1515: public types in app projects should be internal — would block the Infrastructure façade.
 dotnet_diagnostic.CA1515.severity = none
+
+# CA1812: internal type never instantiated — false positive; DI constructs CurrentUser and interceptors.
+dotnet_diagnostic.CA1812.severity = none
+
+# CA1591: require XML comments on public APIs — this is an app, not a documented NuGet package.
+dotnet_diagnostic.CA1591.severity = none
+
+# IDE0005: unused usings — suggestion only; as an error it also forces GenerateDocumentationFile.
+dotnet_diagnostic.IDE0005.severity = suggestion
+
+# IDE0008: forbid var — we use var; AnalysisMode All turns this on by default.
+dotnet_diagnostic.IDE0008.severity = none
+
+# IDE0058: unused return values — fluent APIs (AddScoped, UseNpgsql) always return something.
+dotnet_diagnostic.IDE0058.severity = none

@@ -1,1 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk"/>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup Label="Framework References">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup Label="Project References">
+    <ProjectReference Include="..\ChromaLoom.Kernel\ChromaLoom.Kernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="External Packages">
+    <!-- Validation -->
+    <PackageReference Include="FluentValidation" />
+    <!-- Persistence -->
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+
+</Project>

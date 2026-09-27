@@ -1,5 +1,4 @@
-using ChromaLoom.Api.Setup.Pipeline.Orchestration;
-using ChromaLoom.Api.Setup.Services.Registration;
+using ChromaLoom.Api.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
 
