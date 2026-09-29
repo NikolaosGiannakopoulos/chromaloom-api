@@ -8,6 +8,7 @@ internal static class QueryFilterExtensions
     {
         internal ModelBuilder ApplyQueryFilters(params IQueryFilter[] filters)
         {
+            ArgumentNullException.ThrowIfNull(modelBuilder);
             ArgumentNullException.ThrowIfNull(filters);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

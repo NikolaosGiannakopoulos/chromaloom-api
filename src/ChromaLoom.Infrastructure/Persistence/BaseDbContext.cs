@@ -20,12 +20,15 @@ public abstract class BaseDbContext(DbContextOptions options) : DbContext(option
 
         modelBuilder.HasDefaultSchema(Schema);
 
-        if (GetType().Namespace is { } currentNamespace)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                GetType().Assembly,
-                type => type.Namespace?.StartsWith(currentNamespace, StringComparison.Ordinal) == true);
-        }
+        var contextNamespace = GetType().Namespace
+            ?? throw new InvalidOperationException(
+                $"{GetType().Name} must live in a namespace so module configurations can be discovered.");
+
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            GetType().Assembly,
+            type => type.Namespace is not null
+                && (type.Namespace.Equals(contextNamespace, StringComparison.Ordinal)
+                    || type.Namespace.StartsWith(contextNamespace + ".", StringComparison.Ordinal)));
 
         modelBuilder.ApplyQueryFilters(QueryFilters);
     }

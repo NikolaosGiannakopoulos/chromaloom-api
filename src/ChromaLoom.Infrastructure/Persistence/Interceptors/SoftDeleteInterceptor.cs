@@ -40,10 +40,13 @@ internal sealed class SoftDeleteInterceptor(ICurrentUser currentUser) : SaveChan
 
         foreach (var entry in entries)
         {
-            entry.State = EntityState.Modified;
+            entry.State = EntityState.Unchanged;
             entry.Entity.IsDeleted = true;
             entry.Entity.DeletedAt = now;
             entry.Entity.DeletedBy = userId;
+            entry.Property(e => e.IsDeleted).IsModified = true;
+            entry.Property(e => e.DeletedAt).IsModified = true;
+            entry.Property(e => e.DeletedBy).IsModified = true;
         }
     }
 }

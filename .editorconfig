@@ -13,26 +13,32 @@ indent_size = 2
 [*.cs]
 indent_size = 4
 
-# Prefer file-scoped namespaces; block namespaces warn (and fail the build).
+# Prefer file-scoped namespaces (EnforceCodeStyleInBuild).
 csharp_style_namespace_declarations = file_scoped:warning
 
-# CA2007: ConfigureAwait — not needed in ASP.NET Core; no UI sync context.
-dotnet_diagnostic.CA2007.severity = none
-
-# CA1515: public types in app projects should be internal — would block the Infrastructure façade.
-dotnet_diagnostic.CA1515.severity = none
-
-# CA1812: internal type never instantiated — false positive; DI constructs CurrentUser and interceptors.
-dotnet_diagnostic.CA1812.severity = none
-
-# CA1591: require XML comments on public APIs — this is an app, not a documented NuGet package.
-dotnet_diagnostic.CA1591.severity = none
-
-# IDE0005: unused usings — suggestion only; as an error it also forces GenerateDocumentationFile.
+# As an error, forces GenerateDocumentationFile on every project.
 dotnet_diagnostic.IDE0005.severity = suggestion
 
-# IDE0008: forbid var — we use var; AnalysisMode All turns this on by default.
+# var is preferred.
 dotnet_diagnostic.IDE0008.severity = none
 
-# IDE0058: unused return values — fluent APIs (AddScoped, UseNpgsql) always return something.
+# Fluent APIs always return a value.
 dotnet_diagnostic.IDE0058.severity = none
+
+# DI constructs internal types.
+dotnet_diagnostic.CA1812.severity = none
+
+# ASP.NET Core / libraries — no sync context; ConfigureAwait is noise.
+dotnet_diagnostic.CA2007.severity = none
+
+# Domain exceptions always carry a Code — standard empty/message constructors don't fit.
+dotnet_diagnostic.CA1032.severity = none
+
+# Result<T>.Success/Failure — normal for the Result pattern.
+dotnet_diagnostic.CA1000.severity = none
+
+# Implicit operators pair with Success/Failure.
+dotnet_diagnostic.CA2225.severity = none
+
+# Type name Error is Result-pattern vocabulary.
+dotnet_diagnostic.CA1716.severity = none

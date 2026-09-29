@@ -4,11 +4,12 @@ internal static partial class PipelineOrchestration
 {
     extension(WebApplication app)
     {
-        internal void UsePipeline()
+        private WebApplication UseErrorHandling()
         {
-            app
-                .UseErrorHandling()
-                .UseDocumentation();
+            app.UseExceptionHandler();
+            app.UseStatusCodePages();
+
+            return app;
         }
     }
 }

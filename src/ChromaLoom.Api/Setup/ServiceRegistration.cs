@@ -10,6 +10,8 @@ internal static partial class ServiceRegistration
         {
             builder
                 .AddStartupBanner()
+                .AddErrorHandling()
+                .AddObservability()
                 .AddDocumentation()
                 .AddInfrastructure();
         }
