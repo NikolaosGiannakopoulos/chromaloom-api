@@ -8,7 +8,9 @@ internal static partial class PipelineOrchestration
         {
             app
                 .UseErrorHandling()
-                .UseDocumentation();
+                .UseSecurity()
+                .UseDocumentation()
+                .UseHealthChecks();
         }
     }
 }

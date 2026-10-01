@@ -12,12 +12,8 @@ internal sealed class OperationCanceledExceptionHandler : IExceptionHandler
         ArgumentNullException.ThrowIfNull(httpContext);
         ArgumentNullException.ThrowIfNull(exception);
 
-        if (exception is not OperationCanceledException
-            || !httpContext.RequestAborted.IsCancellationRequested)
-        {
-            return ValueTask.FromResult(false);
-        }
-
-        return ValueTask.FromResult(true);
+        return ValueTask.FromResult(
+            exception is OperationCanceledException
+            && httpContext.RequestAborted.IsCancellationRequested);
     }
 }

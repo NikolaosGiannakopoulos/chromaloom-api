@@ -9,6 +9,11 @@ internal static partial class ServiceRegistration
     {
         private WebApplicationBuilder AddStartupBanner()
         {
+            if (!builder.Environment.IsDevelopment())
+            {
+                return builder;
+            }
+
             var content = new Rows(
                 new Text(FiggleFonts.KeyboardSmall.Render("Chroma"), new Style(Color.Cyan)),
                 new Text(FiggleFonts.KeyboardSmall.Render("Loom"), new Style(Color.Cyan)),

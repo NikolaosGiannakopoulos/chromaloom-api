@@ -42,15 +42,15 @@ internal sealed class AuditInterceptor(ICurrentUser currentUser) : SaveChangesIn
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = now;
-                entry.Entity.CreatedBy = userId;
+                entry.Property(e => e.CreatedAt).CurrentValue = now;
+                entry.Property(e => e.CreatedBy).CurrentValue = userId;
                 entry.Property(e => e.UpdatedAt).IsModified = false;
                 entry.Property(e => e.UpdatedBy).IsModified = false;
             }
             else if (entry.State == EntityState.Modified)
             {
-                entry.Entity.UpdatedAt = now;
-                entry.Entity.UpdatedBy = userId;
+                entry.Property(e => e.UpdatedAt).CurrentValue = now;
+                entry.Property(e => e.UpdatedBy).CurrentValue = userId;
                 entry.Property(e => e.CreatedAt).IsModified = false;
                 entry.Property(e => e.CreatedBy).IsModified = false;
             }

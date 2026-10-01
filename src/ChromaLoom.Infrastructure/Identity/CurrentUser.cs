@@ -6,6 +6,7 @@ namespace ChromaLoom.Infrastructure.Identity;
 
 internal sealed class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
 {
-    public string? Id => httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
-        ?? httpContextAccessor.HttpContext?.User.FindFirstValue("sub");
+    public string? Id =>
+        httpContextAccessor.HttpContext?.User.FindFirstValue("sub")
+        ?? httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }

@@ -42,15 +42,7 @@ public static class ResultExtensions
     {
         ArgumentNullException.ThrowIfNull(error);
 
-        var (statusCode, title) = error.Type switch
-        {
-            ErrorType.Validation => (StatusCodes.Status400BadRequest, "Validation failed."),
-            ErrorType.Unauthorized => (StatusCodes.Status401Unauthorized, "Unauthorized."),
-            ErrorType.Forbidden => (StatusCodes.Status403Forbidden, "Forbidden."),
-            ErrorType.NotFound => (StatusCodes.Status404NotFound, "Resource not found."),
-            ErrorType.Conflict => (StatusCodes.Status409Conflict, "Conflict."),
-            _ => (StatusCodes.Status400BadRequest, "Request could not be completed.")
-        };
+        var (statusCode, title) = HttpErrorMapping.Map(error.Type);
 
         return TypedResults.Problem(
             title: title,

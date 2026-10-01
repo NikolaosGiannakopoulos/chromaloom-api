@@ -2,8 +2,8 @@ namespace ChromaLoom.Kernel.Abstractions.Entities;
 
 public interface IAuditable
 {
-    DateTimeOffset CreatedAt { get; set; }
-    string? CreatedBy { get; set; }
-    DateTimeOffset? UpdatedAt { get; set; }
-    string? UpdatedBy { get; set; }
+    DateTimeOffset CreatedAt { get; }
+    string? CreatedBy { get; }
+    DateTimeOffset? UpdatedAt { get; }
+    string? UpdatedBy { get; }
 }

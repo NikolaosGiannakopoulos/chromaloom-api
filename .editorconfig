@@ -28,6 +28,9 @@ dotnet_diagnostic.IDE0058.severity = none
 # DI constructs internal types.
 dotnet_diagnostic.CA1812.severity = none
 
+# Modular monolith libraries intentionally expose public APIs to sibling projects.
+dotnet_diagnostic.CA1515.severity = none
+
 # ASP.NET Core / libraries — no sync context; ConfigureAwait is noise.
 dotnet_diagnostic.CA2007.severity = none
 

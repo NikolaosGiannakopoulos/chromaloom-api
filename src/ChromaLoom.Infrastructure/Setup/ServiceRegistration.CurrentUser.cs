@@ -8,7 +8,7 @@ namespace ChromaLoom.Infrastructure.Setup;
 
 public static partial class ServiceRegistration
 {
-    private static WebApplicationBuilder AddIdentity(this WebApplicationBuilder builder)
+    private static WebApplicationBuilder AddCurrentUser(this WebApplicationBuilder builder)
     {
         builder.Services.AddHttpContextAccessor();
         builder.Services.TryAddScoped<ICurrentUser, CurrentUser>();

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ChromaLoom.Kernel.Abstractions.Entities;
 using ChromaLoom.Infrastructure.Persistence.QueryFilters;
 
 namespace ChromaLoom.Infrastructure.Persistence;
@@ -31,5 +32,6 @@ public abstract class BaseDbContext(DbContextOptions options) : DbContext(option
                     || type.Namespace.StartsWith(contextNamespace + ".", StringComparison.Ordinal)));
 
         modelBuilder.ApplyQueryFilters(QueryFilters);
+        modelBuilder.ApplyConcurrencyTokens();
     }
 }

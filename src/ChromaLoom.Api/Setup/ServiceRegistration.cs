@@ -11,9 +11,11 @@ internal static partial class ServiceRegistration
             builder
                 .AddStartupBanner()
                 .AddErrorHandling()
+                .AddInfrastructure()
+                .AddSecurity()
                 .AddObservability()
                 .AddDocumentation()
-                .AddInfrastructure();
+                .AddHealthChecks();
         }
     }
 }

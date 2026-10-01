@@ -1,0 +1,15 @@
+# Global defaults applied to all scrape operations.
+global:
+  # Frequency at which Prometheus collects metrics from targets.
+  scrape_interval: 15s
+  # Frequency at which alerting and recording rules are evaluated.
+  evaluation_interval: 15s
+
+# List of target jobs Prometheus regularly scrapes.
+scrape_configs:
+  # Unique job identifier for scraping the OpenTelemetry Collector metrics.
+  - job_name: otel-collector
+    # Static target definitions where metrics endpoints are hosted.
+    static_configs:
+      # List of network hostnames and ports exposing Prometheus format metrics.
+      - targets: ["otel-collector:8889"]

@@ -23,6 +23,9 @@
     <PackageReference Include="Asp.Versioning.OpenApi" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
 
+    <!-- Authentication -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+
     <!-- Validation -->
     <PackageReference Include="FluentValidation" />
 

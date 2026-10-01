@@ -8,7 +8,7 @@ public static partial class ServiceRegistration
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        builder.AddIdentity();
+        builder.AddCurrentUser();
 
         return builder;
     }

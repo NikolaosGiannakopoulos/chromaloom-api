@@ -1,0 +1,59 @@
+# Defines Grafana provisioning API version.
+apiVersion: 1
+
+# List of datasources automatically added to Grafana on startup.
+datasources:
+  # Configuration block for the Prometheus metrics datasource.
+  - name: Prometheus
+    # Specifies the Prometheus datasource plugin type.
+    type: prometheus
+    # Unique identifier used by Grafana to reference this datasource.
+    uid: prometheus
+    # Configures Grafana server to proxy queries to avoid CORS issues.
+    access: proxy
+    # Internal Docker URL pointing to the Prometheus container and port.
+    url: http://prometheus:9090
+    # Marks Prometheus as the primary default datasource in Grafana UI.
+    isDefault: true
+    # Prevents manual UI editing to preserve infrastructure-as-code state.
+    editable: false
+
+  # Configuration block for the Loki log datasource.
+  - name: Loki
+    # Specifies the Loki datasource plugin type.
+    type: loki
+    # Unique identifier used by Grafana to reference Loki.
+    uid: loki
+    # Proxies browser requests through Grafana backend server.
+    access: proxy
+    # Internal Docker URL pointing to the Loki container port.
+    url: http://loki:3100
+    # Disables manual edits within Grafana user interface.
+    editable: false
+
+  # Configuration block for the Tempo tracing datasource.
+  - name: Tempo
+    # Specifies the Tempo datasource plugin type.
+    type: tempo
+    # Unique identifier used by Grafana to reference Tempo.
+    uid: tempo
+    # Proxies browser requests through Grafana backend server.
+    access: proxy
+    # Internal Docker URL pointing to the Tempo HTTP container port.
+    url: http://tempo:3200
+    # Disables manual edits within Grafana user interface.
+    editable: false
+    # Additional settings connecting Tempo with Loki and Prometheus.
+    jsonData:
+      # Defines automated correlation jump from traces to logs.
+      tracesToLogs:
+        # Sets Loki as the target log source when jumping from traces.
+        datasourceUid: loki
+      # Defines metrics source for rendering service graph dependencies.
+      serviceMap:
+        # Sets Prometheus as source for service topology metrics.
+        datasourceUid: prometheus
+      # Enables node graph visualization for distributed trace paths.
+      nodeGraph:
+        # Toggles node graph UI view to active.
+        enabled: true

@@ -1,0 +1,84 @@
+# Receivers define how telemetry data enters the collector.
+receivers:
+  # Configures standard OpenTelemetry Protocol (OTLP) receiver.
+  otlp:
+    # Supported OTLP ingestion network protocols.
+    protocols:
+      # Enables gRPC transport for incoming telemetry.
+      grpc:
+        # Binds gRPC endpoint to listen on all container network interfaces at port 4317.
+        endpoint: 0.0.0.0:4317
+      # Enables HTTP transport for incoming telemetry.
+      http:
+        # Binds HTTP endpoint to listen on all container network interfaces at port 4318.
+        endpoint: 0.0.0.0:4318
+
+# Processors transform or filter data before exporting.
+processors:
+  # Batches telemetry entries together for high-throughput exporting.
+  batch:
+
+# Exporters route processed telemetry to external backend systems.
+exporters:
+  # Custom OTLP exporter instance targeting Tempo.
+  otlp/tempo:
+    # Target address pointing directly to Tempo's internal OTLP gRPC port.
+    endpoint: tempo:4317
+    # TLS encryption options for internal traffic.
+    tls:
+      # Disables TLS certificate checks for local development.
+      insecure: true
+
+  # Custom OTLP/HTTP exporter instance targeting Loki.
+  otlphttp/loki:
+    # Target address pointing directly to Loki's OTLP ingestion endpoint.
+    endpoint: http://loki:3100/otlp
+    # TLS encryption options for local traffic.
+    tls:
+      # Disables TLS requirement for local container networking.
+      insecure: true
+
+  # Prometheus exporter exposing metrics endpoint for scraping.
+  prometheus:
+    # Address and port where Prometheus metrics endpoint is exposed.
+    endpoint: 0.0.0.0:8889
+    # Prefix namespace applied to all emitted telemetry metrics.
+    namespace: chromaloom
+    # Converts OpenTelemetry resource attributes into metric labels.
+    resource_to_telemetry_conversion:
+      # Enables automatic attribute-to-label conversion.
+      enabled: true
+
+  # Debug exporter for logging telemetry directly to collector console.
+  debug:
+    # Sets console log detail output level to basic.
+    verbosity: basic
+
+# Service defines active telemetry pipelines combining receivers, processors, and exporters.
+service:
+  # Pipeline configurations for processing telemetry data streams.
+  pipelines:
+    # Pipeline configuration handling distributed traces.
+    traces:
+      # Sets OTLP receiver to accept incoming traces.
+      receivers: [otlp]
+      # Applies batching processor to traces.
+      processors: [batch]
+      # Routes output traces directly to Tempo exporter.
+      exporters: [otlp/tempo]
+    # Pipeline configuration handling application metrics.
+    metrics:
+      # Sets OTLP receiver to accept incoming metrics.
+      receivers: [otlp]
+      # Applies batching processor to metrics.
+      processors: [batch]
+      # Exposes converted metrics via Prometheus scrapable endpoint.
+      exporters: [prometheus]
+    # Pipeline configuration handling application log entries.
+    logs:
+      # Sets OTLP receiver to accept incoming logs.
+      receivers: [otlp]
+      # Applies batching processor to log entries.
+      processors: [batch]
+      # Routes log records directly to Loki exporter via OTLP HTTP.
+      exporters: [otlphttp/loki]

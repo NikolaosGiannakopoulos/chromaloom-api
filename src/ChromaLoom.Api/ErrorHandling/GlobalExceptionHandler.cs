@@ -1,7 +1,10 @@
 using System.Diagnostics;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using ChromaLoom.Kernel.Results;
+using ChromaLoom.Infrastructure.Http;
 using Microsoft.AspNetCore.Diagnostics;
+using ChromaLoom.Kernel.Abstractions.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ChromaLoom.Api.ErrorHandling;
 
@@ -20,13 +23,12 @@ internal sealed class GlobalExceptionHandler(
         var method = httpContext.Request.Method;
         var path = httpContext.Request.Path.Value ?? string.Empty;
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
-        var userId = httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? httpContext.User.FindFirstValue("sub")
-            ?? "anonymous";
+        var userId = httpContext.RequestServices.GetService<ICurrentUser>()?.Id ?? "anonymous";
 
-        ErrorLog.Unhandled(logger, exception, method, path, traceId, userId);
+        Logs.Unhandled(logger, exception, method, path, traceId, userId);
 
-        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        var (statusCode, title) = HttpErrorMapping.Map(ErrorType.Failure);
+        httpContext.Response.StatusCode = statusCode;
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
@@ -34,14 +36,14 @@ internal sealed class GlobalExceptionHandler(
             Exception = exception,
             ProblemDetails = new ProblemDetails
             {
-                Title = "An unexpected error occurred.",
-                Status = StatusCodes.Status500InternalServerError
+                Title = title,
+                Status = statusCode
             }
         });
     }
 }
 
-internal static partial class ErrorLog
+internal static partial class Logs
 {
     [LoggerMessage(
         Level = LogLevel.Error,

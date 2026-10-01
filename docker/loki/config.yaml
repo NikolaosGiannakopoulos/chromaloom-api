@@ -1,0 +1,61 @@
+# Disables multi-tenant isolation requirement for simplified local development.
+auth_enabled: false
+
+# HTTP web server binding configuration for Loki.
+server:
+  # Listens on port 3100 for API queries and log ingestion.
+  http_listen_port: 3100
+
+# Common storage and network settings shared across Loki components.
+common:
+  # Sets loopback interface host binding.
+  instance_addr: 127.0.0.1
+  # Sets default path prefix for internal file storage.
+  path_prefix: /
+  # Storage backends configuration block.
+  storage:
+    # Uses local filesystem for persistent log storage.
+    filesystem:
+      # Specifies container directory where binary log chunks are saved.
+      chunks_directory: /loki/chunks
+      # Specifies container directory where alerting and recording rules are saved.
+      rules_directory: /loki/rules
+  # Sets single-node log replication factor for local dev.
+  replication_factor: 1
+  # Distributed key-value store ring configuration.
+  ring:
+    # Key-value store provider setup.
+    kvstore:
+      # Uses volatile in-memory ring configuration for single-node setups.
+      store: inmemory
+
+# Database schema indexing configuration.
+schema_config:
+  # List of schema active configurations over time.
+  configs:
+    # Defines active period start date for this schema config.
+    - from: 2024-01-01
+      # Specifies TSDB engine as storage index format.
+      store: tsdb
+      # Stores underlying binary chunk files on filesystem storage.
+      object_store: filesystem
+      # Defines Loki database schema version 13.
+      schema: v13
+      # Index prefix and partitioning settings.
+      index:
+        # Applies prefix string to generated index file names.
+        prefix: index_
+        # Creates a new index partition file every 24 hours.
+        period: 24h
+
+# Ingestion limits and metadata parsing flags.
+limits_config:
+  # Enables parsing structured OTLP metadata attributes.
+  allow_structured_metadata: true
+  # Enables log volume calculation metrics in queries.
+  volume_enabled: true
+
+# Alerting rule evaluator options.
+ruler:
+  # Target Alertmanager URL for Loki log alerts.
+  alertmanager_url: http://localhost:9093

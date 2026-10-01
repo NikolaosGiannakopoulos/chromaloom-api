@@ -1,0 +1,50 @@
+# HTTP web server listening configuration for Tempo.
+server:
+  # Exposes Tempo API and UI integration on port 3200.
+  http_listen_port: 3200
+
+# Distributor handles incoming trace ingestion.
+distributor:
+  # Configures receivers accepting traces from external sources.
+  receivers:
+    # OTLP protocol ingestion options.
+    otlp:
+      # Enabled protocol configurations.
+      protocols:
+        # Configures gRPC trace ingester endpoint.
+        grpc:
+          # Binds gRPC ingester to all container network interfaces at port 4317.
+          endpoint: 0.0.0.0:4317
+
+# Ingester batches traces in memory before flushing to persistent storage.
+ingester:
+  # Duration to keep an inactive trace in memory before closing it.
+  trace_idle_period: 10s
+  # Maximum memory block size before forcing disk flush.
+  max_block_bytes: 1_000_000
+  # Maximum time duration a trace block stays open in memory.
+  max_block_duration: 5m
+
+# Compactor merges small trace blocks on disk into optimized larger blocks.
+compactor:
+  # Compaction window configuration.
+  compaction:
+    # Time window over which small trace blocks are compacted.
+    compaction_window: 1h
+    # Total duration trace blocks remain saved on disk before deletion.
+    block_retention: 24h
+
+# Persistent trace storage configurations.
+storage:
+  # Target storage settings for traces.
+  trace:
+    # Specifies local filesystem as storage backend.
+    backend: local
+    # Write-Ahead Log (WAL) prevents trace data loss during sudden crashes.
+    wal:
+      # Defines directory path where incoming WAL traces are buffered.
+      path: /var/tempo/wal
+    # Local filesystem target path configuration.
+    local:
+      # Defines directory path where finalized trace block files are permanently saved.
+      path: /var/tempo/blocks

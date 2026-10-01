@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ChromaLoom.Kernel.Exceptions;
+using ChromaLoom.Infrastructure.Http;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace ChromaLoom.Api.ErrorHandling;
@@ -20,13 +21,7 @@ internal sealed class DomainExceptionHandler(
             return false;
         }
 
-        var statusCode = domainException switch
-        {
-            NotFoundException => StatusCodes.Status404NotFound,
-            ConflictException => StatusCodes.Status409Conflict,
-            ForbiddenException => StatusCodes.Status403Forbidden,
-            _ => StatusCodes.Status400BadRequest
-        };
+        var (statusCode, title) = HttpErrorMapping.Map(domainException);
 
         httpContext.Response.StatusCode = statusCode;
 
@@ -36,7 +31,7 @@ internal sealed class DomainExceptionHandler(
             Exception = exception,
             ProblemDetails = new ProblemDetails
             {
-                Title = "Request could not be completed.",
+                Title = title,
                 Detail = domainException.Message,
                 Status = statusCode,
                 Extensions =

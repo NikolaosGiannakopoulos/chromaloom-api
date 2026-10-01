@@ -1,5 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using ChromaLoom.Kernel.Results;
+using ChromaLoom.Infrastructure.Http;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace ChromaLoom.Api.ErrorHandling;
@@ -20,7 +22,8 @@ internal sealed class ValidationExceptionHandler(
             return false;
         }
 
-        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        var (statusCode, title) = HttpErrorMapping.Map(ErrorType.Validation);
+        httpContext.Response.StatusCode = statusCode;
 
         var errors = validationException.Errors
             .GroupBy(failure => failure.PropertyName)
@@ -34,8 +37,8 @@ internal sealed class ValidationExceptionHandler(
             Exception = exception,
             ProblemDetails = new ValidationProblemDetails(errors)
             {
-                Title = "Validation failed.",
-                Status = StatusCodes.Status400BadRequest
+                Title = title,
+                Status = statusCode
             }
         });
     }

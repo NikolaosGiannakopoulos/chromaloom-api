@@ -26,4 +26,9 @@ public sealed record Error(string Code, string Description, ErrorType Type)
     {
         return new(code, description, ErrorType.Conflict);
     }
+
+    public static Error Failure(string code, string description)
+    {
+        return new(code, description, ErrorType.Failure);
+    }
 }
